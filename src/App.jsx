@@ -1,11 +1,23 @@
 import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import NavBar from "./components/NavBar";
+import MainPage from "./components/pages/MainPage";
+import SmoothieConstructor from "./components/pages/SmoothieConstructor";
+import CartPage from "./components/pages/CartPage";
+import AboutUs from "./components/pages/AboutUs";
 
-function App() {
+const App = () => {
   return (
-    <div className="bg-gray-100 min-h-screen flex flex-col items-center py-8">
-      <h1 className="text-red-600 font-bold">Smoothie Bar</h1>
-    </div>
+    <Router>
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/smoothie-constructor" element={<SmoothieConstructor />} />
+        <Route path="/about-us" element={<AboutUs />} />
+        <Route path="/cart" element={<CartPage />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;

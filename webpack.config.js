@@ -19,6 +19,15 @@ module.exports = {
                 test: /\.css$/,
                 use: ["style-loader", "css-loader", "postcss-loader"],
             },
+            {
+                test: /\.(jpg|jpeg|png|gif|svg)$/,
+                use: {
+                    loader: 'file-loader',
+                    options: {
+                        name: 'assets/[name].[hash].[ext]',
+                    },
+                },
+            },
         ],
     },
     plugins: [
@@ -27,7 +36,7 @@ module.exports = {
         }),
     ],
     resolve: {
-        extensions: ['*', '.js', '.jsx'],
+        extensions: ['.*', '.js', '.jsx'],
     },
     devServer: {
         static: {
