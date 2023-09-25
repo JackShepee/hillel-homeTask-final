@@ -33,6 +33,7 @@ router.post('/', async (req, res) => {
         availability: req.body.availability,
         price: req.body.price,
         ingredients: req.body.ingredients,
+        image: req.body.image
     });
 
     try {

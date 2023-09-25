@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const ordersSchame = new mongoose.Schema({
+const ordersSchema = new mongoose.Schema({
     name: { type: String, required: true },
     surname: { type: String, required: true },
     deliveryType: { type: String, required: true },
@@ -10,6 +10,6 @@ const ordersSchame = new mongoose.Schema({
     smoothie: { type: String, required: true }
 });
 
-const Order = mongoose.model('Order', ordersSchame);
+const Order = mongoose.model('Order', ordersSchema);
 
 module.exports = Order;

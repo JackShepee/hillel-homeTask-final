@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { fetchPromotions } from '../api/asyncActions';
 
 const initialState = {
     smoothies: [],
-    cart: [],
     promotions: [],
+    loading: false,
+    error: null,
 };
 
 const smoothieSlice = createSlice({
@@ -13,7 +15,13 @@ const smoothieSlice = createSlice({
         setSmoothies(state, action) {
             state.smoothies = action.payload;
         },
-        setPromotions(state, action) {
+        startLoading: (state) => {
+            state.loading = true;
+        },
+        endLoading: (state) => {
+            state.loading = false;
+        },
+        setPromotions: (state, action) => {
             state.promotions = action.payload;
         },
         addToCart(state, action) {
@@ -26,14 +34,22 @@ const smoothieSlice = createSlice({
             state.cart = [];
         },
     },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchPromotions.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchPromotions.fulfilled, (state, action) => {
+                state.promotions = action.payload;
+                state.loading = false;
+            })
+            .addCase(fetchPromotions.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            });
+    },
 });
 
-export const {
-    setSmoothies,
-    setPromotions,
-    addToCart,
-    removeFromCart,
-    clearCart,
-} = smoothieSlice.actions;
-
+export const { setSmoothies, addToCart, removeFromCart, clearCart, startLoading, endLoading, setPromotions } = smoothieSlice.actions;
 export default smoothieSlice.reducer;

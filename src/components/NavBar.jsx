@@ -16,9 +16,6 @@ const NavBar = () => {
           </a>
         </div>
         <div className="space-x-4 flex gap-[55px]">
-          <NavLink to="/" className="text-white hover:text-gray-400">
-            Main
-          </NavLink>
           <NavLink
             to="/smoothie-constructor"
             className="text-white hover:text-gray-400"
