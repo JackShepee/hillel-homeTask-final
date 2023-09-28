@@ -8,7 +8,9 @@ const SmoothiePromotional = () => {
   const { promotions, loading } = useSelector((state) => state.smoothie);
 
   useEffect(() => {
-    dispatch(fetchPromotions());
+    dispatch(fetchPromotions()).catch((error) => {
+      console.error("Failed to fetch smoothies:", error);
+    });
   }, [dispatch]);
 
   if (loading) {

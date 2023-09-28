@@ -12,3 +12,15 @@ export const fetchPromotions = createAsyncThunk(
         }
     }
 );
+
+export const fetchIngredients = createAsyncThunk(
+    'ingredient/fetchIngredients',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axios.get("http://localhost:5000/ingredient");
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);

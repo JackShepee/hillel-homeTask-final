@@ -4,6 +4,7 @@ import { fetchPromotions } from '../api/asyncActions';
 const initialState = {
     smoothies: [],
     promotions: [],
+    cart: [],
     loading: false,
     error: null,
 };

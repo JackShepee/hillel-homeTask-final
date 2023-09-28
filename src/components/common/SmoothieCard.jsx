@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import Button from "../utils/Button";
+import { addToCart } from "../../slices/smoothieSlice";
+import { useDispatch } from "react-redux";
 
 const SmoothieCard = ({ smoothie }) => {
+  const dispatch = useDispatch();
   const [showAllIngredients, setShowAllIngredients] = useState(false);
 
   const displayedIngredients = showAllIngredients
@@ -9,7 +12,7 @@ const SmoothieCard = ({ smoothie }) => {
     : smoothie.ingredients.slice(0, 3);
 
   const addToCartHandler = () => {
-    console.log(`${smoothie.name} added to cart! Price is: ${smoothie.price}$`);
+    dispatch(addToCart(smoothie));
   };
 
   return (

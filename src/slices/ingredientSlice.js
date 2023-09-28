@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { fetchIngredients } from '../api/asyncActions';
 
 const initialState = {
     ingredients: [],
@@ -21,6 +22,21 @@ const ingredientSlice = createSlice({
         setError(state, action) {
             state.error = action.payload;
         },
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchIngredients.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchIngredients.fulfilled, (state, action) => {
+                state.ingredients = action.payload;
+                state.loading = false;
+            })
+            .addCase(fetchIngredients.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            });
     },
 });
 
