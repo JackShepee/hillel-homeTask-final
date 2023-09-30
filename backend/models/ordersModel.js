@@ -7,7 +7,7 @@ const ordersSchema = new mongoose.Schema({
     phone: { type: String, required: true },
     address: { type: String, reguired: false },
     price: { type: Number, required: true },
-    smoothie: { type: String, required: true }
+    smoothie: { type: Array, required: true }
 });
 
 const Order = mongoose.model('Order', ordersSchema);

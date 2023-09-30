@@ -4,7 +4,7 @@ import { fetchPromotions } from '../api/asyncActions';
 const initialState = {
     smoothies: [],
     promotions: [],
-    cart: [],
+    cart: JSON.parse(localStorage.getItem('cart') || '[]'),
     loading: false,
     error: null,
 };
@@ -27,12 +27,15 @@ const smoothieSlice = createSlice({
         },
         addToCart(state, action) {
             state.cart.push(action.payload);
+            localStorage.setItem('cart', JSON.stringify(state.cart));
         },
         removeFromCart(state, action) {
             state.cart = state.cart.filter((item, index) => index !== action.payload);
+            localStorage.setItem('cart', JSON.stringify(state.cart));
         },
         clearCart(state) {
             state.cart = [];
+            localStorage.setItem('cart', JSON.stringify(state.cart));
         },
     },
     extraReducers: (builder) => {

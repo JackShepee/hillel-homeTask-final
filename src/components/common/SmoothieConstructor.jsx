@@ -15,6 +15,11 @@ const SmoothieConstructor = () => {
   const [totalVolume, setTotalVolume] = useState(0);
   const [isFull, setIsFull] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState({
+    isOpen: false,
+    title: "",
+    content: "",
+  });
 
   useEffect(() => {
     dispatch(fetchIngredients()).catch((error) => {
@@ -42,6 +47,11 @@ const SmoothieConstructor = () => {
       return;
     }
 
+    if (selectedIngredients.length >= 5 && !isIngredientSelected) {
+      setIsFull(true);
+      return;
+    }
+
     setIsFull(false);
     setTotalVolume(newTotalVolume);
 
@@ -62,13 +72,28 @@ const SmoothieConstructor = () => {
   };
 
   const handleCreateSmoothie = () => {
+    if (selectedIngredients.length === 0) {
+      setModalContent({
+        isOpen: true,
+        title: "No Ingredients Selected",
+        content: "Please choose at least one ingredient for your smoothie.",
+      });
+      return;
+    }
+
     const customSmoothie = {
       name: "Custom Smoothie",
       size: selectedSize,
       ingredients: selectedIngredients,
       price: totalPrice,
     };
+
     dispatch(addToCart(customSmoothie));
+    setModalContent({
+      isOpen: true,
+      title: "Smoothie Added!",
+      content: "Your custom smoothie has been added to the cart.",
+    });
     handleClearSelections();
   };
 
@@ -80,8 +105,12 @@ const SmoothieConstructor = () => {
     setIsFull(false);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const handleCloseModal = () => {
+    setModalContent({
+      isOpen: false,
+      title: "",
+      content: "",
+    });
   };
 
   return (
@@ -90,7 +119,14 @@ const SmoothieConstructor = () => {
         isOpen={isModalOpen}
         title="Volume Exceeded"
         content="This amount will exceed the total size. Please change the size or choose a smaller portion."
-        onClose={closeModal}
+        onClose={() => setIsModalOpen(false)}
+      />
+
+      <Modal
+        isOpen={modalContent.isOpen}
+        title={modalContent.title}
+        content={modalContent.content}
+        onClose={handleCloseModal}
       />
 
       {isFull && (

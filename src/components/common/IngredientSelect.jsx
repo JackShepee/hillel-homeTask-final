@@ -37,7 +37,7 @@ const IngredientSelect = ({
             {ingredient.name}
           </span>
           <span className="block text-sm text-gray-500">
-            Price per liter: {ingredient.pricePerLiter}
+            Price per liter: {ingredient.pricePerLiter}$
           </span>
         </div>
       </div>
@@ -61,7 +61,7 @@ const IngredientSelect = ({
               isFull
                 ? "bg-gray-300 cursor-not-allowed"
                 : "bg-blue-500 hover:bg-blue-700"
-            } text-white font-bold py-2 px-4 ml-3 mt-0 rounded`}
+            } text-white font-bold py-2 px-4 mt-0 ml-3 rounded align-center`}
             disabled={isFull}
           >
             Add

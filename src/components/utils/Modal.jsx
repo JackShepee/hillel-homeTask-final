@@ -1,6 +1,6 @@
 import React from "react";
 
-const Modal = ({ isOpen, title, content, onClose }) => {
+const Modal = ({ isOpen, title, children, content, onClose }) => {
   if (!isOpen) return null;
 
   return (
@@ -20,9 +20,13 @@ const Modal = ({ isOpen, title, content, onClose }) => {
                 <h3 className="text-lg leading-6 font-medium text-gray-900">
                   {title}
                 </h3>
-                <div className="mt-2">
-                  <p className="text-sm text-gray-500">{content}</p>
-                </div>
+                {content ? (
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-500">{content}</p>
+                  </div>
+                ) : (
+                  children
+                )}
               </div>
             </div>
           </div>

@@ -2,10 +2,16 @@ import React, { useState } from "react";
 import Button from "../utils/Button";
 import { addToCart } from "../../slices/smoothieSlice";
 import { useDispatch } from "react-redux";
+import Modal from "../utils/Modal";
 
 const SmoothieCard = ({ smoothie }) => {
   const dispatch = useDispatch();
   const [showAllIngredients, setShowAllIngredients] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState({
+    title: "",
+    content: "",
+  });
 
   const displayedIngredients = showAllIngredients
     ? smoothie.ingredients
@@ -13,10 +19,21 @@ const SmoothieCard = ({ smoothie }) => {
 
   const addToCartHandler = () => {
     dispatch(addToCart(smoothie));
+    setModalContent({
+      title: "Success",
+      content: `${smoothie.name} has been added to your cart!`,
+    });
+    setIsModalOpen(true);
   };
 
   return (
     <div className="m-4 p-4 bg-white shadow-lg rounded-md flex flex-col items-center max-w-sm">
+      <Modal
+        isOpen={isModalOpen}
+        title={modalContent.title}
+        content={modalContent.content}
+        onClose={() => setIsModalOpen(false)}
+      />
       <img
         src={smoothie.image}
         alt={smoothie.name}
@@ -37,7 +54,9 @@ const SmoothieCard = ({ smoothie }) => {
           {showAllIngredients ? "Show Less" : "Show More Ingredients"}
         </button>
       )}
-      <Button onClick={addToCartHandler}>Buy me now</Button>
+      <Button onClick={addToCartHandler} className="mt-5">
+        Buy me now
+      </Button>
     </div>
   );
 };
