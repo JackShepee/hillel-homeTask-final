@@ -3,12 +3,16 @@ import Button from "../utils/Button";
 
 const IngredientSelect = ({
   ingredient,
-  selectedIngredients,
   onAddIngredient,
+  selectedIngredients,
   selectedSize,
   isFull,
 }) => {
   const [selectedVolume, setSelectedVolume] = useState(0);
+  const isCurrentIngredientSelected = selectedIngredients.some(
+    (item) => item.ingredient.name === ingredient.name
+  );
+  const shouldDisableButton = isFull && !isCurrentIngredientSelected;
 
   const handleVolumeChange = (e) => {
     setSelectedVolume(Number(e.target.value));
@@ -57,12 +61,12 @@ const IngredientSelect = ({
           </select>
           <Button
             onClick={handleAddClick}
+            disabled={shouldDisableButton}
             className={`${
-              isFull
+              shouldDisableButton
                 ? "bg-gray-300 cursor-not-allowed"
                 : "bg-blue-500 hover:bg-blue-700"
             } text-white font-bold py-2 px-4 mt-0 ml-3 rounded align-center`}
-            disabled={isFull}
           >
             Add
           </Button>

@@ -47,7 +47,7 @@ const SmoothieConstructor = () => {
       return;
     }
 
-    if (selectedIngredients.length >= 5 && !isIngredientSelected) {
+    if (!isIngredientSelected && selectedIngredients.length >= 5) {
       setIsFull(true);
       return;
     }

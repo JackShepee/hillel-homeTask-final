@@ -3,16 +3,40 @@ import { useSelector, useDispatch } from "react-redux";
 import { clearCart, removeFromCart } from "../../slices/smoothieSlice";
 import { Link } from "react-router-dom";
 import OrderForm from "../common/OrderForm";
+import Modal from "../utils/Modal";
 
 const Cart = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.smoothie.cart);
-  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const [showOrderForm, setShowOrderForm] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
 
   const totalAmount = cartItems.reduce(
     (sum, currentItem) => sum + currentItem.price,
     0
   );
+
+  const handleDeleteConfirm = () => {
+    if (itemToDelete === "all") {
+      dispatch(clearCart());
+    } else if (typeof itemToDelete === "number") {
+      dispatch(removeFromCart(itemToDelete));
+    }
+    setShowDeleteConfirmation(false);
+    setItemToDelete(null);
+  };
+
+  const handleOpenDeleteModal = (item) => {
+    setItemToDelete(item);
+    setShowDeleteConfirmation(true);
+  };
+
+  const handleOrderSuccess = () => {
+    setShowConfirmation(true);
+    setShowOrderForm(false);
+  };
 
   if (!cartItems.length) {
     return (
@@ -32,6 +56,33 @@ const Cart = () => {
     );
   }
 
+  if (showConfirmation) {
+    return (
+      <div className="p-5 mt-5 text-center">
+        <h2 className="text-2xl font-bold mb-5">Order Successful!</h2>
+        <p className="text-gray-600 mb-5">
+          Your order has been successfully placed!
+        </p>
+        <Link
+          to="/"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Continue Shopping
+        </Link>
+      </div>
+    );
+  }
+
+  if (showOrderForm) {
+    return (
+      <OrderForm
+        smoothies={cartItems}
+        onBack={() => setShowOrderForm(false)}
+        onOrderSuccess={handleOrderSuccess}
+      />
+    );
+  }
+
   return (
     <div className="p-5">
       <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
@@ -40,7 +91,7 @@ const Cart = () => {
           <div key={index} className="border p-4 mb-4 rounded shadow relative">
             <button
               className="absolute top-0 right-0 mt-2 mr-2 bg-red-500 hover:bg-red-700 text-white font-bold rounded-full p-1"
-              onClick={() => dispatch(removeFromCart(index))}
+              onClick={() => handleOpenDeleteModal(index)}
             >
               &times;
             </button>
@@ -72,23 +123,42 @@ const Cart = () => {
       <div className="mt-5 flex space-x-4">
         <button
           className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          onClick={() => dispatch(clearCart())}
+          onClick={() => handleOpenDeleteModal("all")}
         >
           Clear Cart
         </button>
         <button
-          onClick={() => setIsOrderModalOpen(true)}
+          onClick={() => setShowOrderForm(true)}
           className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
         >
           Order Smoothie
         </button>
-        <OrderForm
-          isOpen={isOrderModalOpen}
-          onClose={() => setIsOrderModalOpen(false)}
-          onOrderSuccess={() => setOrderSuccess(true)}
-          smoothies={cartItems}
-        />
       </div>
+      <Modal
+        isOpen={showDeleteConfirmation}
+        onClose={() => setShowDeleteConfirmation(false)}
+        title="Confirmation"
+      >
+        <p>
+          {itemToDelete === "all"
+            ? "Are you sure you want to clear the cart?"
+            : `Are you sure you want to delete the smoothie "${cartItems[itemToDelete]?.name}" from your cart?`}
+        </p>
+        <div className="mt-5 flex space-x-4">
+          <button
+            onClick={handleDeleteConfirm}
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Yes
+          </button>
+          <button
+            onClick={() => setShowDeleteConfirmation(false)}
+            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+          >
+            No
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 };
