@@ -36,9 +36,13 @@ const SmoothieConstructor = () => {
   };
 
   const handleAddIngredient = (ingredient, volume) => {
-    const isIngredientSelected = selectedIngredients.some(
+    const existingIngredient = selectedIngredients.find(
       (item) => item.ingredient.name === ingredient.name
     );
+
+    const newVolume = existingIngredient
+      ? existingIngredient.volume + volume
+      : volume;
 
     const newTotalVolume = totalVolume + volume;
 
@@ -47,7 +51,7 @@ const SmoothieConstructor = () => {
       return;
     }
 
-    if (!isIngredientSelected && selectedIngredients.length >= 5) {
+    if (!existingIngredient && selectedIngredients.length >= 5) {
       setIsFull(true);
       return;
     }
@@ -55,11 +59,11 @@ const SmoothieConstructor = () => {
     setIsFull(false);
     setTotalVolume(newTotalVolume);
 
-    if (isIngredientSelected) {
+    if (existingIngredient) {
       setSelectedIngredients(
         selectedIngredients.map((item) =>
           item.ingredient.name === ingredient.name
-            ? { ingredient, volume }
+            ? { ingredient, volume: newVolume }
             : item
         )
       );

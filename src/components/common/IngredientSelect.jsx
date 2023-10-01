@@ -8,7 +8,7 @@ const IngredientSelect = ({
   selectedSize,
   isFull,
 }) => {
-  const [selectedVolume, setSelectedVolume] = useState(0);
+  const [selectedVolume, setSelectedVolume] = useState(50); // Set default to 50ml
   const isCurrentIngredientSelected = selectedIngredients.some(
     (item) => item.ingredient.name === ingredient.name
   );
@@ -19,9 +19,7 @@ const IngredientSelect = ({
   };
 
   const handleAddClick = () => {
-    if (selectedVolume > 0) {
-      onAddIngredient(ingredient, selectedVolume);
-    }
+    onAddIngredient(ingredient, selectedVolume);
   };
 
   return (
@@ -52,7 +50,6 @@ const IngredientSelect = ({
             value={selectedVolume}
             onChange={handleVolumeChange}
           >
-            <option value={0}>0 ml</option>
             {[...Array(selectedSize / 50).keys()].map((i) => (
               <option key={i} value={(i + 1) * 50}>
                 {(i + 1) * 50} ml
