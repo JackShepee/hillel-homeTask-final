@@ -4,6 +4,11 @@ import { addOrder, setError } from "../../slices/orderSlice";
 import { clearCart } from "../../slices/smoothieSlice";
 import axios from "axios";
 import Modal from "../utils/Modal";
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const OrderForm = ({ smoothies, onClose = () => {} }) => {
   const dispatch = useDispatch();
@@ -76,7 +81,7 @@ const OrderForm = ({ smoothies, onClose = () => {} }) => {
         0
       );
 
-      const response = await axios.post("http://localhost:5000/order", {
+      const response = await axios.post(`${API_BASE_URL}/order`, {
         ...formData,
         price: totalPrice,
         smoothie: smoothies,

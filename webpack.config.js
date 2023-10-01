@@ -1,6 +1,10 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
+const dotenv = require('dotenv');
+
+const env = dotenv.config().parsed;
 
 module.exports = {
     entry: './src/index.js',
@@ -40,9 +44,23 @@ module.exports = {
                 { from: 'public', to: 'public' },
             ],
         }),
+        new webpack.DefinePlugin({
+            'process.env.REACT_APP_API_BASE_URL': JSON.stringify(env.REACT_APP_API_BASE_URL),
+        }),
+        new webpack.ProvidePlugin({
+            process: 'process/browser',
+        }),
     ],
     resolve: {
         extensions: ['.*', '.js', '.jsx'],
+        fallback: {
+            "path": require.resolve("path-browserify"),
+            "os": require.resolve("os-browserify/browser"),
+            "crypto": require.resolve("crypto-browserify"),
+            "stream": require.resolve("stream-browserify"),
+            "buffer": require.resolve("buffer/"),
+            process: require.resolve('process/browser'),
+        }
     },
     devServer: {
         static: {
